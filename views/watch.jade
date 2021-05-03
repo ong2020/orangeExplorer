@@ -16,14 +16,14 @@ block contents
     div.card.float-left.mr-2.mt-2(style="width:31rem", v-for="(watch, index) in watchs")
       div.card-body
         h6.card-title.text-monospace 
-          a(v-bind:href="'/address/' + watch.address") {{ watch.address }} 
+          a(v-bind:href="'/address/' + watch.address.replace('0x','ong')") {{ watch.address.replace('0x','ong') }}
           span.badge.badge-info(v-if='watch.isContract') Contract
             //- i.fas.fa-chevron-right
-        h6.card-subtitle.mb-2.text-muted 
+        h6.card-subtitle.mb-2.text-muted
           i.fas.fa-spinner.fa-pulse(v-if="watch.balance === undefined")
           span(v-if="watch.balance !== undefined") {{ watch.balance }}
         //- p.card-text Some quick example text to build on the card title and make up the bulk of the card's content.
-        button.btn.btn-sm.btn-outline-danger(type="button", v-on:click="onDel(index)") 삭제
+        button.btn.btn-sm.btn-outline-danger(type="button", v-on:click="onDel(index)") remove
 
     div.clearfix
 
@@ -31,7 +31,7 @@ block contents
 
     var app = new Vue({
       el: '#app',
-      data: { 
+      data: {
         address: '',
         watchs: []
       },
@@ -50,6 +50,7 @@ block contents
           window.localStorage.setItem("watchs", JSON.stringify(this.watchs));
         },
         onAdd: function() {
+          this.address = this.address.replace('ong','0x')
           if( !web3.isAddress(this.address) ) {
             alert('Address is not valid.')
             return false;

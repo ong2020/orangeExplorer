@@ -37,7 +37,7 @@ block contents
     var app = new Vue({
       el: '#app',
       data: { 
-        address: '#{address}',
+        address: '#{address}'.replace('ong','0x'),
         balance: null,
         balance_ong: null,
         balance_usd: null,

@@ -10,20 +10,16 @@ block contents
         tr
           th(width="14%") Current Block
           th(width="14%") API Version
-          th(width="14%") Client/Node Version
-          th(width="14%") Network Protocol  Version
-          th(width="*") Current Gas Price
+          th(width="*") Client/Node Version
+          th(width="30%") Current Gas Price
           th(width="14%") Hashrate
-          th(width="14%") Number of Peers
       tr
         td
           a(v-bind:href="'/block/' + blockNumber") {{ blockNumber }}
         td {{ api }}
         td {{ node }}
-        td {{ network }}
         td {{ gasPrice }}
         td {{ hashrate }}
-        td {{ peerCount }}
 
     //- h4 Latest Block: 
       a(v-bind:href="'/block/' + blockNumber") {{ blockNumber }}
@@ -103,10 +99,8 @@ block contents
       data: { 
         api: null,
         node: null,
-        network: null,
         gasPrice: null,
         hashrate: null,
-        peerCount: null,
         blockNumber: null,
         blocks: [],
         txs:[]
@@ -214,9 +208,7 @@ block contents
       //- getNode().then(r=>console.log(r));
       self.api = web3.version.api;
       getNode().then(r =>  self.node = r);
-      getNetwork().then(r =>  self.network = r);
       getHashrate().then(r =>  self.hashrate = r);
-      getPeerCount().then(r =>  self.peerCount = r);
       //- getGasPrice().then(r =>  self.gasPrice = r.toString(10) + ' (' +  web3.fromWei(r, 'onger').toString(10) + ' ONG)');
       getGasPrice().then(r =>  self.gasPrice = r.toString(10) + ' (' +  web3.fromWei(r, 'gwei').toString(10) + ' Gwei)');
 
