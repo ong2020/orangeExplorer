@@ -51,6 +51,7 @@ block contents
             div
                 a(v-bind:href="'/block/' + block.number.toString(10)") {{ block.hash }}
             div
+                span Mine by
                 a(v-bind:href="'/address/' + block.miner.replace('0x','ong').toString(10)") {{ block.miner.replace('0x','ong') }}
           td {{ block.gasUsed }} / {{ block.gasLimit }}
           td {{ block.difficulty }}

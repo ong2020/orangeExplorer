@@ -20,6 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3105e05d-673d-4da3-97da-b4ed5b638ead" name="Default Changelist" comment="init project">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/index.jade" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.jade" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -75,10 +76,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="init project" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="496" y="274" key="Vcs.Push.Dialog.v2" timestamp="1620153890342">
+    <state x="496" y="274" key="Vcs.Push.Dialog.v2" timestamp="1620153973229">
       <screen x="0" y="23" width="1792" height="1044" />
     </state>
-    <state x="496" y="274" key="Vcs.Push.Dialog.v2/0.23.1792.1044@0.23.1792.1044" timestamp="1620153890342" />
+    <state x="496" y="274" key="Vcs.Push.Dialog.v2/0.23.1792.1044@0.23.1792.1044" timestamp="1620153973229" />
     <state x="594" y="289" width="604" height="490" key="find.popup" timestamp="1620153225504">
       <screen x="0" y="23" width="1792" height="1044" />
     </state>
