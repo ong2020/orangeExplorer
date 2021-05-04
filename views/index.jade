@@ -35,8 +35,7 @@ block contents
       thead._thead-light
         tr
           th Block #
-          th # Tx Hash
-          th Miner
+          th # Tx Hash / Miner
           th Gas Used / Gas Limit
           th Difficulty
           th Timestamp
@@ -49,9 +48,10 @@ block contents
           td       
             a(v-bind:href="'/block/' + block.number.toString(10)") {{ block.number.toString(10) }}
           td
-            a(v-bind:href="'/block/' + block.number.toString(10)") {{ block.hash }}
-          td
-            a(v-bind:href="'/address/' + block.miner.replace('0x','ong').toString(10)") {{ block.miner.replace('0x','ong') }}
+            div
+                a(v-bind:href="'/block/' + block.number.toString(10)") {{ block.hash }}
+            div
+                a(v-bind:href="'/address/' + block.miner.replace('0x','ong').toString(10)") {{ block.miner.replace('0x','ong') }}
           td {{ block.gasUsed }} / {{ block.gasLimit }}
           td {{ block.difficulty }}
           td {{ new Date(block.timestamp * 1000).toGMTString() }}
