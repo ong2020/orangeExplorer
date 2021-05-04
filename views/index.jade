@@ -39,6 +39,7 @@ block contents
           th Size
           th Gas Limit
           th Gas Used
+          th Difficulty
           th Timestamp
       tbody
         tr(v-if="blocks.length === 0")
@@ -51,7 +52,8 @@ block contents
           td {{ block.transactions.length }}
           td {{ block.size }} bytes
           td {{ block.gasLimit }} 
-          td {{ block.gasUsed }} 
+          td {{ block.gasUsed }}
+          td {{ block.difficulty }}
           td {{ new Date(block.timestamp * 1000).toGMTString() }}
 
     //- ========================
