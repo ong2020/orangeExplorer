@@ -49,7 +49,7 @@ block contents
             a(v-bind:href="'/block/' + block.number.toString(10)") {{ block.number.toString(10) }}
           td
             div
-                a(v-bind:href="'/block/' + block.number.toString(10)") {{ block.hash }}
+                a(v-bind:href="'/tx/' + block.hash.toString(10)") {{ block.hash }}
             div
                 span(style="padding-right:5px;color:#777;") Mine by
                 a(v-bind:href="'/address/' + block.miner.replace('0x','ong').toString(10)") {{ block.miner.replace('0x','ong') }}
