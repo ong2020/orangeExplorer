@@ -1,0 +1,93 @@
+extends layout/default_layout
+
+block contents
+  div#app
+    h1#page-box=title
+      div#page
+        ul
+          li.page
+            a(v-if="current_page > 1" v-bind:href="'/blockList/' + (current_page - 1)") prev
+            a(v-if="current_page > 3" v-bind:href="'/blockList/1'") home
+            a(v-bind:class="'active'" v-bind:href="'/blockList/' + current_page") {{ current_page }}
+            a(v-if="current_page<last_page-3&& current_page+1 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 1)") {{ current_page + 1 }}
+            a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 2)") {{ current_page + 2 }}
+            span(v-if="current_page<last_page-5") ...
+            a(v-if="current_page<last_page-2" v-bind:href="'/blockList/' + getPage(2)") {{ getPage(2) }}
+            a(v-if="current_page<last_page-1" v-bind:href="'/blockList/' + getPage(1)") {{ getPage(1) }}
+            a(v-if="current_page<last_page" v-bind:href="'/blockList/' + getPage(0)") {{ getPage(0) }}
+            a(v-if="current_page < last_page - 3" v-bind:href="'/blockList/' + last_page") last
+            a(v-if="current_page < last_page" v-bind:href="'/blockList/' + (current_page + 1)") next
+    div#list
+
+    table.table.table-striped._table-bordered._table-dark.w-100
+      thead._thead-light
+        tr
+          th Address
+          th balance
+      tbody
+        tr(v-if="acs.length === 0")
+          td(colspan="8")
+            div(style="text-align:center")
+              i.fas.fa-2x.fa-spinner.fa-pulse
+        tr(v-for="ac in acs", v-if="acs.length > 0")
+          td
+            a.d-inline-block.text-truncate(v-bind:href="'/address/' + ac.address + '/1/'", style="max-width:200px") {{ ac.address }}
+          td {{ web3.fromWei(ac.balance, 'onger').toString(10) + ' ONG' }}
+
+  script.
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        current_page: #{ current_page } || 1,
+        size : 10,
+        last_page: 1,
+        acs: []
+      },
+      created: function() {
+        init.bind(this)();
+      }
+    });
+
+    function getBlockNumber() {
+      return new Promise((res, rej) => {
+        web3.ong.getBlockNumber((error, result) => {
+          if(error) rej(error);
+          else res(result);
+        });
+      });
+    }
+
+    async function getTransactions(self) {
+      return new Promise((res, rej) => {
+        $.ajax({
+          url : "#{env.ORANGE_RPC_URL}/api/v1/address/list",
+          type : "POST",
+          data : {
+            "page_no": self.current_page,
+            "page_size": self.size
+          },
+          success : function (data){
+            let result = data.data;
+            res(result);
+          },
+          fail: function (err){
+            console.log(err);
+            rej(err);
+          }
+        });
+      });
+    }
+
+    function getPage(n){
+      let self = app || this;
+      return self.current_page<(self.last_page-10-n)?(self.current_page + 10 + 2 - n):(self.last_page-n);
+    }
+
+    // init Function
+    async function init() {
+      var self = app || this;
+      var result = await getTransactions(self)
+      self.acs = result.list;
+      self.last_page = parseInt(result.total / result.page_size) ;
+    }

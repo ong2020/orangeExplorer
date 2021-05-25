@@ -45,12 +45,12 @@ block contents
       tr
         th From 
         td
-          a(v-bind:href="'/address/' + tx.from") {{ tx.from }}
+          a(v-bind:href="'/address/' + tx.from+ '/1/'") {{ tx.from }}
       tr
         th To 
         td 
           span(v-if="tx.to === '0x0'") {{ tx.to }}
-          a(v-if="tx.to !== '0x0'", v-bind:href="'/address/' + tx.to") {{ tx.to }}
+          a(v-if="tx.to !== '0x0'", v-bind:href="'/address/' + tx.to+ '/1/'") {{ tx.to }}
       tr
         th Value
         td {{ tx.value }} {{ tx.value_ong }}

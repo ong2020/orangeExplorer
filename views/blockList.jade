@@ -1,0 +1,104 @@
+extends layout/default_layout
+
+block contents
+  div#app
+    h1#page-box=title
+      div#page
+        ul
+          li.page
+            a(v-if="current_page > 1" v-bind:href="'/blockList/' + (current_page - 1)") prev
+            a(v-if="current_page > 3" v-bind:href="'/blockList/1'") home
+            a(v-bind:class="'active'" v-bind:href="'/blockList/' + current_page") {{ current_page }}
+            a(v-if="current_page<last_page-3 && current_page+1 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 1)") {{ current_page + 1 }}
+            a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 2)") {{ current_page + 2 }}
+            span(v-if="current_page<last_page-5") ...
+            a(v-if="current_page<last_page-2" v-bind:href="'/blockList/' + getPage(2)") {{ getPage(2) }}
+            a(v-if="current_page<last_page-1" v-bind:href="'/blockList/' + getPage(1)") {{ getPage(1) }}
+            a(v-if="current_page<last_page" v-bind:href="'/blockList/' + getPage(0)") {{ getPage(0) }}
+            a(v-if="current_page < last_page - 3" v-bind:href="'/blockList/' + last_page") last
+            a(v-if="current_page < last_page" v-bind:href="'/blockList/' + (current_page + 1)") next
+    div#list
+
+      table.table.table-striped._table-bordered._table-dark.w-100
+        thead._thead-light
+          tr
+            th Block #
+            th # Tx Hash / Miner
+            th Gas Used / Gas Limit
+            th Difficulty
+            th Timestamp
+        tbody
+          tr(v-if="blocks.length === 0")
+            td(colspan="6")
+              div(style="text-align:center") loading...
+          tr(v-for="block in blocks", v-if="blocks.length > 0")
+            td
+              a(v-bind:href="'/block/' + Number(block.number).toString(10)") {{ Number(block.number).toString(10) }}
+            td
+              div
+                a(v-bind:href="'/block/' + block.hash.toString(10)") {{ block.hash }}
+              div
+                span(style="padding-right:5px;color:#777;") Mine by
+                a(v-bind:href="'/address/' + block.miner.replace('0x','ong').toString(10)+ '/1/'") {{ block.miner.replace('0x','ong') }}
+                //span {{ Number(block.value).toString(10) }}
+            td {{ Number(block.gasUsed).toString(10) }} / {{ Number(block.gasLimit).toString(10) }}
+            td {{ Number(block.difficulty).toString(10) }}
+            td {{ new Date(block.timestamp * 1000).Format("yyyy/MM/dd hh:mm:ss") }}
+
+  script.
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        current_page: #{ current_page } || 1,
+        size : 10,
+        last_page: 1,
+        blocks: []
+      },
+      created: function() {
+        init.bind(this)();
+      }
+    });
+
+    function getBlockNumber() {
+      return new Promise((res, rej) => {
+        web3.ong.getBlockNumber((error, result) => {
+          if(error) rej(error);
+          else res(result);
+        });
+      });
+    }
+
+    async function getBlocks(self) {
+      return new Promise((res, rej) => {
+        $.ajax({
+          url : "#{env.ORANGE_RPC_URL}/api/v1/block/list",
+          type : "POST",
+          data : {
+            "page_no": self.current_page,
+            "page_size": self.size
+          },
+          success : function (data){
+            let result = data.data;
+            res(result);
+          },
+          fail: function (err){
+            console.log(err);
+            rej(err);
+          }
+        });
+      });
+    }
+
+    function getPage(n){
+      let self = app || this;
+      return self.current_page<(self.last_page-10-n)?(self.current_page + 10 + 2 - n):(self.last_page-n);
+    }
+
+    // init Function
+    async function init() {
+      var self = app || this;
+      var result = await getBlocks(self)
+      self.blocks = result.list;
+      self.last_page = parseInt(result.total / result.page_size) ;
+    }

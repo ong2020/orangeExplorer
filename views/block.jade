@@ -2,7 +2,7 @@ extends layout/default_layout
 
 block contents
   h1=title
-    span.text-muted.ml-2 ##{number}
+    span.text-muted.ml-2.cici-title ##{number}
 
   div#app(v-cloak)
 
@@ -32,7 +32,7 @@ block contents
         td Mined By
         td
           span(v-if="block.miner === undefined") pending
-          a(v-if="block.miner !== undefined", v-bind:href="'/address/' +  block.miner.replace('0x','ong')") {{  block.miner.replace('0x','ong') }}
+          a(v-if="block.miner !== undefined", v-bind:href="'/address/' +  block.miner.replace('0x','ong')+ '/1/'") {{  block.miner.replace('0x','ong') }}
       tr
         td Difficulty
         td {{ block.difficulty }}
@@ -92,7 +92,7 @@ block contents
     var app = new Vue({
       el: '#app',
       data: {
-        number:  #{number},
+        number:  '#{number}',
         confirmations: null,
         block: {
           number:null,
@@ -136,7 +136,7 @@ block contents
 
     async function getBlockInfo(number) {
 
-      var latestBlockNumber = await getBlockNumber();
+      // var latestBlockNumber = await getBlockNumber();
 
       var block = await getBlock(number); //or "latest"
       block.difficulty = block.difficulty.toString(10);

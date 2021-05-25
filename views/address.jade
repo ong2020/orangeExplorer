@@ -5,32 +5,84 @@ block contents
     span.text-muted.ml-2.sub #{address}
 
   div#app(v-cloak)
-    table.table.table-striped.table-bordered._table-sm.w-100
-      thead
-        tr
-          th.w-25 Balance
-          td
-            i.fas.fa-lg.fa-spinner.fa-pulse(v-if="balance===null") 
-            {{ balance }} {{ balance_ong }}
-        tr
-          th Balance(USD)
-          td 
-            i.fas.fa-lg.fa-spinner.fa-pulse(v-if="balance_usd===null") 
-            {{ balance_usd }}
-        tr
-          th Storage
-          td 
-            i.fas.fa-lg.fa-spinner.fa-pulse(v-if="storage===null") 
-            {{ storage }}
-        tr
-          th Transaction Count
-          td 
-            i.fas.fa-lg.fa-spinner.fa-pulse(v-if="transactionCount===null") 
-            {{ transactionCount }}
-        tr(v-if="isContract")
-          th Code
-          td
-            textarea(disabled, readonly, rows="25") {{ code }}
+    div
+      table.table.table-striped.table-bordered._table-sm.w-100
+        thead
+          tr
+            th.w-25 Balance
+            td
+              i.fas.fa-lg.fa-spinner.fa-pulse(v-if="balance===null")
+              {{ balance }} {{ balance_ong }}
+          tr
+            th Balance(USD)
+            td
+              i.fas.fa-lg.fa-spinner.fa-pulse(v-if="balance_usd===null")
+              {{ balance_usd }}
+          tr
+            th Storage
+            td
+              i.fas.fa-lg.fa-spinner.fa-pulse(v-if="storage===null")
+              {{ storage }}
+          tr
+            th Transaction Count
+            td
+              i.fas.fa-lg.fa-spinner.fa-pulse(v-if="transactionCount===null")
+              {{ transactionCount }}
+          tr(v-if="isContract")
+            th Code
+            td
+              textarea(disabled, readonly, rows="25") {{ code }}
+
+      br
+      div
+        h1#page-box Related transactions
+          div#page
+            ul
+              li.page
+                a(v-if="current_page > 1" v-bind:href="'/blockList/' + (current_page - 1)") prev
+                a(v-if="current_page > 3" v-bind:href="'/blockList/1'") home
+                a(v-bind:class="'active'" v-bind:href="'/blockList/' + current_page") {{ current_page }}
+                a(v-if="current_page<last_page-3&& current_page+1 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 1)") {{ current_page + 1 }}
+                a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 2)") {{ current_page + 2 }}
+                span(v-if="current_page<last_page-5") ...
+                a(v-if="current_page<last_page-2" v-bind:href="'/blockList/' + getPage(2)") {{ getPage(2) }}
+                a(v-if="current_page<last_page-1" v-bind:href="'/blockList/' + getPage(1)") {{ getPage(1) }}
+                a(v-if="current_page<last_page" v-bind:href="'/blockList/' + getPage(0)") {{ getPage(0) }}
+                a(v-if="current_page < last_page - 3" v-bind:href="'/blockList/' + last_page") last
+                a(v-if="current_page < last_page" v-bind:href="'/blockList/' + (current_page + 1)") next
+
+      div#list
+
+      table.table.table-striped._table-bordered._table-dark.w-100
+        thead._thead-light
+          tr
+            th TxHash
+            th Block
+            th Value
+            th From
+            th To
+            th Gas Used
+            th Gas Price
+            th Tx Fee
+        tbody
+          tr(v-if="txs.length === 0")
+            td(colspan="8")
+              div(style="text-align:center")
+                i.fas.fa-2x.fa-spinner.fa-pulse
+          tr(v-for="tx in txs", v-if="txs.length > 0")
+            td
+              a.d-inline-block.text-truncate(v-bind:href="'/tx/' + tx.hash", style="max-width:200px") {{ tx.hash }}
+            td
+              a(v-bind:href="'/block/' + Number(tx.blockNumber).toString(10)") {{ Number(tx.blockNumber).toString(10) }}
+            td {{ web3.fromWei(tx.value, 'onger').toString(10) + ' ONG' }}
+            td
+              a.d-inline-block.text-truncate(v-bind:href="'/address/' + tx.from+ '/1/'", style="max-width:150px") {{ tx.from }}
+            td
+              span(v-if="tx.to === '0x0'") {{ tx.to }}
+              a.d-inline-block.text-truncate(v-if="tx.to !== '0x0'", v-bind:href="'/address/' + tx.to+ '/1/'", style="max-width:150px") {{ tx.to }}
+            td {{ Number(tx.gas).toString(10) }}
+            td {{ web3.fromWei(tx.gasPrice, 'onger').toString(10) + ' ONG' }}
+            td {{ web3.fromWei((tx.gas * tx.gasPrice), 'onger').toString(10) + ' ONG' }}
   
   script.
 
@@ -44,16 +96,30 @@ block contents
         storage: null,
         code: null,
         transactionCount: null,
+        current_page: #{ current_page } || 1,
+        size : 10,
+        last_page: 1,
+        txs: []
       },
       computed: {
         isContract: function() {
           return (this.code && this.code.length > 3);
         }
       },
-      created: function() {
+      created: function () {
         getAddressInfo.bind(this)();
+        init.bind(this)();
       }
     });
+
+
+    // init Function
+    async function init() {
+      var self = app || this;
+      var result = await getTransactions(self)
+      self.txs = result.list;
+      self.last_page = parseInt(result.total / result.page_size);
+    }
 
     function getBalance(address) {
       return new Promise((res, rej) => {
@@ -118,4 +184,30 @@ block contents
       self.transactionCount = await getTransactionCount(address);
 
       self.balance_usd = await getONGUSD(web3.fromWei(app.balance, 'onger'));
+    }
+
+    async function getTransactions(self) {
+      return new Promise((res, rej) => {
+        $.ajax({
+          url: "#{env.ORANGE_RPC_URL}/api/v1/transactions/list",
+          type: "POST",
+          data: {
+            "page_no": self.current_page,
+            "page_size": self.size
+          },
+          success: function (data) {
+            let result = data.data;
+            res(result);
+          },
+          fail: function (err) {
+            console.log(err);
+            rej(err);
+          }
+        });
+      });
+    }
+
+    function getPage(n) {
+      let self = app || this;
+      return self.current_page < (self.last_page - 10 - n) ? (self.current_page + 10 + 2 - n) : (self.last_page - n);
     }

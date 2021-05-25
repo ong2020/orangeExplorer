@@ -17,3 +17,52 @@ table textarea {resize: none;width:100%}
 table tr,td,th{text-align:left !important;;vertical-align:top !important;}
 
 .sub{padding-left:10px;font-size:16px;color:#999999;font-weight:normal}
+
+.cici-title{font-size:18px;}
+
+ul,li{
+  list-style: none;
+}
+
+#page-box{
+  position: relative;
+}
+#page{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 14px;
+}
+#page ul{
+  margin: 0;
+}
+#page ul li{
+  margin: 0;
+  font-size: 0;
+}
+#page ul li a,
+#page ul li span{
+  margin: 0 5px;
+  font-size: 14px;
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 0 10px;
+  min-width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  border: 1px solid #cccc;
+  border-radius: 4px;
+}
+#page ul li a:hover{
+  cursor: pointer;
+  background-color: #f1f1f1;
+}
+#page ul li a.active{
+  background-color: #007bfe;
+  color: #fff;
+  border-color: #007bfe;
+}
+#page ul li span{
+  border-color: #f1b0b700;
+}
