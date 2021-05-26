@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // set env vars down to jade
-process.env.ORANGE_RPC_URL = process.env.ORANGE_RPC_URL || "http://scan.orangechain.org/admin"
+process.env.ORANGE_RPC_URL = process.env.ORANGE_RPC_URL || "http://scan.orangechain.org/php"
 app.locals.env = process.env;
 
 // view engine setup
