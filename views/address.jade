@@ -193,7 +193,8 @@ block contents
           type: "POST",
           data: {
             "page_no": self.current_page,
-            "page_size": self.size
+            "page_size": self.size,
+            "address": self.address
           },
           success: function (data) {
             let result = data.data;
