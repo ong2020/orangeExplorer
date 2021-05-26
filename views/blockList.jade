@@ -100,5 +100,5 @@ block contents
       var self = app || this;
       var result = await getBlocks(self)
       self.blocks = result.list;
-      self.last_page = parseInt(result.total / result.page_size) ;
+      self.last_page = Math.ceil(result.total / result.page_size) ;
     }

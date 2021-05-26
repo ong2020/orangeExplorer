@@ -31,7 +31,7 @@ block contents
               i.fas.fa-2x.fa-spinner.fa-pulse
         tr(v-for="ac in acs", v-if="acs.length > 0")
           td
-            a.d-inline-block.text-truncate(v-bind:href="'/address/' + ac.address + '/1/'", style="max-width:200px") {{ ac.address }}
+            a.d-inline-block.text-truncate(v-bind:href="'/address/' + ac.address.replace('0x','ong') + '/1/'", style="max-width:200px") {{ ac.address.replace('0x','ong') }}
           td {{ web3.fromWei(ac.balance, 'onger').toString(10) + ' ONG' }}
 
   script.
@@ -89,5 +89,5 @@ block contents
       var self = app || this;
       var result = await getTransactions(self)
       self.acs = result.list;
-      self.last_page = parseInt(result.total / result.page_size) ;
+      self.last_page = Math.ceil(result.total / result.page_size) ;
     }
