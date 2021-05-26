@@ -76,10 +76,11 @@ block contents
               a(v-bind:href="'/block/' + Number(tx.blockNumber).toString(10)") {{ Number(tx.blockNumber).toString(10) }}
             td {{ web3.fromWei(tx.value, 'onger').toString(10) + ' ONG' }}
             td
-              a.d-inline-block.text-truncate(v-bind:href="'/address/' + tx.from+ '/1/'", style="max-width:150px") {{ tx.from }}
+              span(v-if="address === tx.from").d-inline-block.text-truncate(v-bind:href="'/address/' + tx.from+ '/1/'", style="max-width:150px") {{ tx.from }}
+              a(v-else).d-inline-block.text-truncate(v-bind:href="'/address/' + tx.from+ '/1/'", style="max-width:150px") {{ tx.from }}
             td
-              span(v-if="tx.to === '0x0'") {{ tx.to }}
-              a.d-inline-block.text-truncate(v-if="tx.to !== '0x0'", v-bind:href="'/address/' + tx.to+ '/1/'", style="max-width:150px") {{ tx.to }}
+              span(v-if="address === tx.to").d-inline-block.text-truncate(v-bind:href="'/address/' + tx.to+ '/1/'", style="max-width:150px") {{ tx.to }}
+              a(v-else).d-inline-block.text-truncate(v-bind:href="'/address/' + tx.to+ '/1/'", style="max-width:150px") {{ tx.to }}
             td {{ Number(tx.gas).toString(10) }}
             td {{ web3.fromWei(tx.gasPrice, 'onger').toString(10) + ' ONG' }}
             td {{ web3.fromWei((tx.gas * tx.gasPrice), 'onger').toString(10) + ' ONG' }}
