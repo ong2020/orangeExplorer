@@ -49,6 +49,19 @@ html(lang="en")
     script(src="/popper.min.js", integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49", crossorigin="anonymous")
     script(src="/bootstrap.min.js", integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T", crossorigin="anonymous")
     script.
+
+      var blockNumber = 0;
+
+      function getBlockNumber() {
+        return new Promise((res, rej) => {
+          web3.ong.getBlockNumber((error, result) => {
+            blockNumber = result;
+            console.log("blockNumber=",blockNumber);
+          });
+        });
+      }
+
+
       $("#navbarsDefault a").each(function(i, e){
         if( location.href == e.href ) {
           e.closest("li.nav-item").classList.add("active");
@@ -61,12 +74,12 @@ html(lang="en")
         var search = evt.target.search.value;
         //- console.log(search, ", ", search.length);
 
-        //- search = search.split('0x').join('');
-        //- var regexpTx = /[0-9a-zA-Z]{64}?/;
-        //- //var regexpAddr =  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/; // TODO ADDR REGEX or use isAddress(hexString) API ?
-        //- var regexpAddr = /^(0x)?[0-9a-f]{40}$/; //New ONG Regular Expression for Addresses
-        //- var regexpBlock = /[0-9]{1,7}?/;
-        //- var result =regexpTx.test(search);
+        // search = search.split('0x').join('');
+        // var regexpTx = /[0-9a-zA-Z]{64}?/;
+        // //var regexpAddr =  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/; // TODO ADDR REGEX or use isAddress(hexString) API ?
+        // var regexpAddr = /^(0x)?[0-9a-f]{40}$/; //New ONG Regular Expression for Addresses
+        // var regexpBlock = /[0-9]{1,7}?/;
+        // var result =regexpTx.test(search);
 
         if( search.length === 66 ) { //tx hash
           location.href = '/tx/' + search;
@@ -76,7 +89,7 @@ html(lang="en")
           location.href = '/block/' + search;
         } else {
           console.log('what?');
-        }      
+        }
         
       });
 
