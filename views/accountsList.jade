@@ -6,17 +6,17 @@ block contents
       div#page
         ul
           li.page
-            a(v-if="current_page > 1" v-bind:href="'/blockList/' + (current_page - 1)") prev
-            a(v-if="current_page > 3" v-bind:href="'/blockList/1'") home
-            a(v-bind:class="'active'" v-bind:href="'/blockList/' + current_page") {{ current_page }}
-            a(v-if="current_page<last_page-3&& current_page+1 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 1)") {{ current_page + 1 }}
-            a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/blockList/' + (current_page + 2)") {{ current_page + 2 }}
+            a(v-if="current_page > 1" v-bind:href="'/accountsList/' + (current_page - 1)") prev
+            a(v-if="current_page > 3" v-bind:href="'/accountsList/1'") home
+            a(v-bind:class="'active'" v-bind:href="'/accountsList/' + current_page") {{ current_page }}
+            a(v-if="current_page<last_page-3&& current_page+1 < getPage(2)" v-bind:href="'/accountsList/' + (current_page + 1)") {{ current_page + 1 }}
+            a(v-if="current_page<last_page-3 && current_page+2 < getPage(2)" v-bind:href="'/accountsList/' + (current_page + 2)") {{ current_page + 2 }}
             span(v-if="current_page<last_page-5") ...
-            a(v-if="current_page<last_page-2" v-bind:href="'/blockList/' + getPage(2)") {{ getPage(2) }}
-            a(v-if="current_page<last_page-1" v-bind:href="'/blockList/' + getPage(1)") {{ getPage(1) }}
-            a(v-if="current_page<last_page" v-bind:href="'/blockList/' + getPage(0)") {{ getPage(0) }}
-            a(v-if="current_page < last_page - 3" v-bind:href="'/blockList/' + last_page") last
-            a(v-if="current_page < last_page" v-bind:href="'/blockList/' + (current_page + 1)") next
+            a(v-if="current_page<last_page-2" v-bind:href="'/accountsList/' + getPage(2)") {{ getPage(2) }}
+            a(v-if="current_page<last_page-1" v-bind:href="'/accountsList/' + getPage(1)") {{ getPage(1) }}
+            a(v-if="current_page<last_page" v-bind:href="'/accountsList/' + getPage(0)") {{ getPage(0) }}
+            a(v-if="current_page < last_page - 3" v-bind:href="'/accountsList/' + last_page") last
+            a(v-if="current_page < last_page" v-bind:href="'/accountsList/' + (current_page + 1)") next
     div#list
 
     table.table.table-striped._table-bordered._table-dark.w-100
