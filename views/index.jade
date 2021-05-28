@@ -184,7 +184,7 @@ block contents
         },
         success: function (data) {
           self.blocks = data.data.list;
-          self.blockNumber = Number(data.data.list[0].blockNumber).toString(10);
+          self.blockNumber = Number(self.blocks[0].number).toString(10);
         },
         fail: function (err) {
           console.log(err);
