@@ -10,14 +10,14 @@ block contents
         tr
           th(width="14%") Current Block
           th(width="14%") API Version
-          th(width="*") Client/Node Version
+          //th(width="*") Client/Node Version
           th(width="30%") Current Gas Price
           th(width="14%") Hashrate
       tr
         td
           a(v-bind:href="'/block/' + blockNumber") {{ blockNumber }}
         td {{ api }}
-        td {{ node }}
+        //td {{ node }}
         td {{ gasPrice }}
         td {{ hashrate }}
 
@@ -184,6 +184,7 @@ block contents
         },
         success: function (data) {
           self.blocks = data.data.list;
+          self.blockNumber = Number(data.data.list[0].blockNumber).toString(10);
         },
         fail: function (err) {
           console.log(err);
