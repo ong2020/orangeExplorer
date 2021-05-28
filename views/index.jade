@@ -11,15 +11,17 @@ block contents
           th(width="14%") Current Block
           th(width="14%") API Version
           //th(width="*") Client/Node Version
+          th(width="24%") Recent 10 blocks Average time
           th(width="30%") Current Gas Price
-          th(width="14%") Hashrate
+          //th(width="14%") Hashrate
       tr
         td
           a(v-bind:href="'/block/' + blockNumber") {{ blockNumber }}
         td {{ api }}
         //td {{ node }}
+        td {{ average }} s
         td {{ gasPrice }}
-        td {{ hashrate }}
+        //td {{ hashrate }}
 
     //- h4 Latest Block: 
       a(v-bind:href="'/block/' + blockNumber") {{ blockNumber }}
@@ -100,6 +102,7 @@ block contents
       data: { 
         api: null,
         node: null,
+        average: '--',
         gasPrice: null,
         hashrate: null,
         blockNumber: null,
@@ -185,11 +188,22 @@ block contents
         success: function (data) {
           self.blocks = data.data.list;
           self.blockNumber = Number(self.blocks[0].number).toString(10);
+          self.average = getRecentBlocksAverageTime(self.blocks);
         },
         fail: function (err) {
           console.log(err);
         }
       });
+    }
+
+    function getRecentBlocksAverageTime(data) {
+      var result = 0;
+      var t = 0;
+      for (var i = 0; i < 10; i++) {
+        if (i >= 1) t += Number(data[i - 1].timestamp) - Number(data[i].timestamp);
+      }
+      result = parseInt(t / 9);
+      return result;
     }
 
     async function getRecentTransactions(self){
