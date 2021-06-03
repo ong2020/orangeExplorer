@@ -37,7 +37,7 @@ block contents
         tr
           th Block #
           th # Tx Hash / Miner
-          th Gas Used / Gas Limit
+          th Transaction Sum
           th Difficulty
           th Timestamp
       tbody
@@ -54,7 +54,8 @@ block contents
             span(style="padding-right:5px;color:#777;") Mine by
             a(v-bind:href="'/address/' + block.miner.replace('0x','ong').toString(10)+ '/1/'") {{ block.miner.replace('0x','ong') }}
             //span {{ Number(block.value).toString(10) }}
-        td {{ Number(block.gasUsed).toString(10) }} / {{ Number(block.gasLimit).toString(10) }}
+        td(style="text-align:center!important;")
+          a(v-bind:href="'/block/' + Number(block.number).toString(10)") {{ block.transactionsSum }}
         td {{ Number(block.difficulty).toString(10) }}
         td {{ new Date(block.timestamp * 1000).Format("yyyy/MM/dd hh:mm:ss") }}
 
